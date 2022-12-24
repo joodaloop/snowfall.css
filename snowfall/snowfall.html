@@ -1,10 +1,124 @@
 <html>
+<meta charset="utf-8">
 <head>
 
+<style>
+
+body{
+	font-family: monospace;
+	color: white;
+}
+
+#output{
+	background: white;
+	color: black;
+	padding: 30px;
+	font-size: 18px;
+	width: 400px;
+	border-radius: 10px;
+	text-align: left;
+}
+
+input{
+	width: 90px;
+	font-size: 14px;
+	padding: 10px 5px;
+	margin: 0px 5px;
+	text-align: center;
+}
+
+.input-label{
+	color: white;
+	width: 50px;
+	display: inline-block;
+	margin: 0px 25px;
+	margin-bottom: 5px;
+}
+
+#inputs{
+	margin-bottom: 30px;
+}
+
+main{
+	margin-top: 25vh;
+	margin-left: 50%;
+	transform: translateX(-50%);
+	width: fit-content;
+	text-align: center;
+}
+
+#copy{
+	padding:  10px;
+	width: 100px;
+	background: white;
+	color: black;
+	float: right;
+	margin-top: 10px;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+h1{
+	margin-top:  50px;
+	text-align: center;
+}
+
+</style>
 </head>
 
 <body style="background:black">
 
-<script snow-color="white" snow-amount="5" src="snowfall.js"></script>
+	<h1> snowfall.css </h1>
 
+<main>
+
+<div id=labels> 
+	<div class=input-label > Color </div>
+	<div class=input-label > Shape </div>
+	<div class=input-label > Size </div>
+	<div class=input-label > Density </div>
+</div>
+
+<div id=inputs> 
+	<input id=color value="white" placeholder="white"> 
+	<input id=shape value="•" placeholder="•"> 
+	<input id=size value=1 placeholder="1 to 4"> 
+	<input id=amount value=4 placeholder="1 to 4"> 
+</div>
+
+<div id=output> </div>
+<button id=copy onclick="copy()">Copy script</button>
+</main>
+<script snow-color="white" snow-amount=4 snow-size=1 snow-shape='•' src="snowfall.js"></script>
+
+<script>
+	function $(id){
+		return document.getElementById(id)
+	}
+
+	$("output").innerText = `<script snow-color="white" snow-shape="•" snow-amount=1 snow-size=1 src="snowfall.js"><\/script>
+	`
+
+	function readInputs(){
+		let shape = $("shape").value
+		let size = $("size").value
+		let color = $("color").value
+		let amount = $("amount").value
+
+		$("output").innerText = `<script snow-color="${color.trim()}" snow-shape="${shape.trim()}" snow-amount=${amount} snow-size=${size} src="snowfall.js"><\/script>`
+	}
+
+	for(let ele of document.getElementsByTagName("input")){
+		ele.addEventListener("input", readInputs)
+	}
+
+	function copy(){
+		$("copy").innerText = "Copied!"
+
+		navigator.clipboard.writeText($("output").innerText);
+
+		setTimeout(() => $("copy").innerText = "Copy tag", 2000 )
+	}
+
+</script>
 </body>

@@ -1,14 +1,38 @@
-let this_js_script = document.querySelector('script[src*=snowfall]'); // or better regexp to get the file name..
+let this_js_script = document.querySelector('script[src*=snowfall]')
 
 
-let snowColor = this_js_script.getAttribute('snow-color');   
-if (typeof snowColor === "undefined" ) {
-   let snowColor = "#333";
+let snowColor = this_js_script.getAttribute('snow-color') ?? undefined;  
+snowColor = snowColor.toLowerCase() 
+let check = isColor(snowColor)
+if (typeof snowColor !== "undefined" && !check ) {
+   snowColor = "#fff";
 }
 
-let amount = this_js_script.getAttribute('snow-amount');   
+let amount = this_js_script.getAttribute('snow-amount') ?? undefined; 
 if (typeof amount === "undefined" ) {
-   let amount = 2;
+   amount = 1;
+}
+
+let shape = this_js_script.getAttribute('snow-shape') ?? undefined; 
+if (typeof shape === "undefined") {
+   shape = "•";
+}
+if( shape.includes("\\") ){
+   shape = shape.replace("\\", "\\\\")
+}
+
+let size = this_js_script.getAttribute('snow-size') ?? undefined; 
+if (typeof size === "undefined" ) {
+   size = 1;
+}
+
+if(size > 4) size = 4
+if(size < 0) size = 1
+
+function isColor(strColor){
+  const s = new Option().style;
+  s.color = strColor;
+  return s.color !== '';
 }
 
 function renderSnowflakes(param = 1){
@@ -16,8 +40,8 @@ function renderSnowflakes(param = 1){
    let node
    let generated = ""
 
-   if (param > 5){
-      param = 5
+   if (param > 4){
+      param = 4
    }
 
    if(param < 0){
@@ -37,7 +61,7 @@ function renderSnowflakes(param = 1){
       generated += `
 
 .snowflake:nth-child(${i+1}) {
-       --size: ${Math.floor(Math.random() * 10) / 8}vw;
+       --size: ${Math.floor(Math.random() * 10 * size) / 8}vw;
        --left-ini: ${Math.floor(Math.random() * 10) - 10}vw;
        --left-end: ${Math.floor(Math.random() * 10) - 10}vw;
        left: ${Math.floor(Math.random() * 100)}vw;
@@ -70,11 +94,12 @@ let stylesheet = `
     width: var(--size);
     height: var(--size);
     background: transparent;
-    padding:  15px;
+    padding: 15px;
     position: absolute;
     border-radius: 50%;
     top: -5vh;
     pointer-events: auto;
+    transition: all 15s ease;
 }
 
 .snowflake:hover:after{
@@ -83,16 +108,23 @@ let stylesheet = `
    transition: all 0.3s ease;
 }
 
+.snowflake:hover{
+   height: 0px;
+   width: 0px;
+   padding: 0px;
+   transition: all 1s ease;
+}
+
 .snowflake:after {
    margin-top: -calc(var(--size));
    margin-left: -calc(var(--size));
-    content: "\\2744"; 
+    content: "${shape}"; 
     color: transparent;
     text-shadow: 0 0 0 ${snowColor.trim()};
     font-size: calc(var(--size) + 10px);
     pointer-events: auto;
     visibility: visible;
-    transition: opacity 15s ease, font-size 1s ease;  
+    transition: opacity 20s ease, font-size 1s ease;  
     font-family: sans-serif;
   }
 
@@ -112,7 +144,18 @@ let stylesheet = `
    margin-left: 0%;
    position: fixed;
    pointer-events: none;
-}`
+}
+
+
+@media screen and (max-device-width: 1000px) {
+
+   .snowflake:after {
+     margin-top: -calc(var(--size) + 5px);
+     margin-left: -calc(var(--size) + 5px);
+    font-size: calc(var(--size) + 5px);
+  }
+
+  `
 
 var s = document.createElement('style');
    s.type = 'text/css';
