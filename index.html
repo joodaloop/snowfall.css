@@ -53,6 +53,7 @@ input{
 
 #inputs{
 	margin-bottom: 30px;
+	z-index: 10;
 }
 
 main{
@@ -126,8 +127,6 @@ a{
 
 <div id=link> <a href="https://joodaloop.com"> ur welcome :)</a> </div>
 
-<script snow-color="white" snow-amount="5" snow-size="1" snow-shape='•' src="snowfall.js"></script>
-
 <script>
 	function $(id){
 		return document.getElementById(id)
@@ -139,7 +138,7 @@ a{
 		let color = $("color").value
 		let amount = Number($("amount").value)
 
-		if(isNaN(amount) == true){
+		if(isNaN(amount) == true || amount > 5){
 			amount = 5
 			$("amount").value = 5
 		}
@@ -149,11 +148,15 @@ a{
 			$("size").value = 1
 		}
 
-		$("output").innerText = `<script snow-color="${color.trim()}" snow-shape="${shape.trim()}" snow-amount=${amount} snow-size=${size} src="https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js"><\/script>`
-	}
+		if(size > 5){
+			size = 5
+			$("size").value = 5
+		}
 
-	for(let ele of document.getElementsByTagName("input")){
-		ele.addEventListener("input", readInputs)
+		renderSnowflakes()
+
+		$("output").innerText = `<script snow-color="${color.trim()}" snow-shape="${shape.trim()}" snow-amount=${amount} snow-size=${size} src="https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js"><\/script>`
+	
 	}
 
 	function copy(){
@@ -162,6 +165,264 @@ a{
 		navigator.clipboard.writeText($("output").innerText);
 
 		setTimeout(() => $("copy").innerText = "Copy script", 1000 )
+	}
+
+	function isColor(strColor){
+	  const s = new Option().style;
+	  s.color = strColor;
+	  return s.color !== '';
+	}
+
+
+function renderSnowflakes(){
+
+	console.log("rendering") 
+
+	let snowColor = $('color').value; 
+	
+	snowColor = snowColor.toLowerCase() 
+	let check = isColor(snowColor)
+	if ( !check ) {
+	   snowColor = "#fff";
+	}
+
+	let amount = Number($("amount").value) 
+	if(isNaN(amount) == true){
+			amount = 5
+			$("amount").value = 5
+		}
+
+	let shape = $('shape').value ?? undefined; 
+	if (typeof shape === "undefined" || shape == "") {
+	   shape = "•";
+	}
+	if( shape.includes("\\") ){
+	   shape = shape.replace("\\", "\\\\")
+	}
+
+	let size = Number($("size").value) 
+	if(isNaN(size) == true){
+			size = 1
+			$("size").value = 1
+		}
+
+	if(size > 5) size = 5
+	if(size < 0) size = 1
+
+   let node
+   let generated = ""
+
+   if (amount > 5){
+      amount = 5
+   }
+
+   if(amount < 0){
+      amount = 1
+   }
+
+   for(i=0; i < (screen.width / 35) * amount ; i++){
+
+      blur = 0
+      if(i%5 == 0) blur = "1"
+      if(i%10 == 0) blur = "2"
+
+      node = document.getElementById("snowbg").children[i]
+
+      generated += `
+
+.snowflake:nth-child(${i+1}) {
+       --size: ${Math.floor(Math.random() * 10 * size) / 8}vw;
+       --left-ini: ${Math.floor(Math.random() * 10) - 10}vw;
+       --left-end: ${Math.floor(Math.random() * 10) - 10}vw;
+       left: ${Math.floor(Math.random() * 100)}vw;
+       animation: snowfall ${7 + Math.floor(Math.random() * 10)}s linear infinite;
+       animation-delay: -${Math.floor(Math.random() * 10)}s;
+       filter: blur(${blur}px);
+         }
+      `
+
+   }
+
+   var style = document.getElementById('snowstyle');
+   style.innerHTML = generated
+
+   document.getElementById("snowbg").innerHTML = ""
+
+   for(i=0; i < (screen.width / 30) * amount ; i++){
+
+      document.getElementById("snowbg").innerHTML += `
+
+         <div class=snowflake></div>
+      `
+   }
+
+
+let stylesheet = `
+.snowflake {
+    --size: 1vw;
+    width: var(--size);
+    height: var(--size);
+    background: transparent;
+    padding: 15px;
+    position: absolute;
+    border-radius: 50%;
+    top: -5vh;
+    pointer-events: auto;
+    transition: all 15s ease;
+}
+
+.snowflake:hover:after{
+   font-size: calc(var(--size) + 50px);
+   opacity: 0;
+   transition: all 0.3s ease;
+}
+
+.snowflake:hover{
+   height: 0px;
+   width: 0px;
+   padding: 0px;
+   transition: all 1s ease;
+}
+
+.snowflake:after {
+   margin-top: -calc(var(--size));
+   margin-left: -calc(var(--size));
+    content: "${shape}"; 
+    color: transparent;
+    text-shadow: 0 0 0 ${snowColor.trim()};
+    font-size: calc(var(--size) + 10px);
+    pointer-events: auto;
+    visibility: visible;
+    transition: opacity 20s ease, font-size 1s ease;  
+    font-family: sans-serif;
+  }
+
+ @keyframes snowfall {
+    0% {
+       transform: translate3d(var(--left-ini), 0, 0);
+   }
+    100% {
+       transform: translate3d(var(--left-end), 110vh, 0);
+   }
+}
+
+#snowbg{
+   height: 110vh;
+   width: 100vw;
+   top:  0px;
+   margin-left: 0%;
+   position: fixed;
+   pointer-events: none;
+}
+
+
+@media screen and (max-device-width: 1000px) {
+
+   .snowflake:after {
+     margin-top: -calc(var(--size) + 5px);
+     margin-left: -calc(var(--size) + 5px);
+    font-size: calc(var(--size) + 5px);
+  }
+
+  `
+var s = document.getElementById('snowsheet');
+   s.innerHTML = stylesheet
+}
+
+
+
+
+let stylesheet = `
+	.snowflake {
+	    --size: 1vw;
+	    width: var(--size);
+	    height: var(--size);
+	    background: transparent;
+	    padding: 15px;
+	    position: absolute;
+	    border-radius: 50%;
+	    top: -5vh;
+	    pointer-events: auto;
+	    transition: all 15s ease;
+	}
+
+	.snowflake:hover:after{
+	   font-size: calc(var(--size) + 50px);
+	   opacity: 0;
+	   transition: all 0.3s ease;
+	}
+
+	.snowflake:hover{
+	   height: 0px;
+	   width: 0px;
+	   padding: 0px;
+	   transition: all 1s ease;
+	}
+
+	.snowflake:after {
+	   margin-top: -calc(var(--size));
+	   margin-left: -calc(var(--size));
+	    content: "•"; 
+	    color: transparent;
+	    text-shadow: 0 0 0 white;
+	    font-size: calc(var(--size) + 10px);
+	    pointer-events: auto;
+	    visibility: visible;
+	    transition: opacity 20s ease, font-size 1s ease;  
+	    font-family: sans-serif;
+	  }
+
+	 @keyframes snowfall {
+	    0% {
+	       transform: translate3d(var(--left-ini), 0, 0);
+	   }
+	    100% {
+	       transform: translate3d(var(--left-end), 110vh, 0);
+	   }
+	}
+
+	#snowbg{
+	   height: 110vh;
+	   width: 100vw;
+	   top:  0px;
+	   margin-left: 0%;
+	   position: fixed;
+	   pointer-events: none;
+	}
+
+
+	@media screen and (max-device-width: 1000px) {
+
+	   .snowflake:after {
+	     margin-top: -calc(var(--size) + 5px);
+	     margin-left: -calc(var(--size) + 5px);
+	    font-size: calc(var(--size) + 5px);
+	  }
+
+	  `
+
+let s = document.createElement('style');
+   s.type = 'text/css';
+   s.id="snowsheet"
+   s.innerHTML = stylesheet
+   document.getElementsByTagName('head')[0].appendChild(s);
+
+let style = document.createElement('style');
+   style.type = 'text/css';
+   style.id="snowstyle"
+   style.innerHTML = ""
+   document.getElementsByTagName('head')[0].appendChild(style);
+
+document.body.innerHTML += `
+
+   <div id=snowbg></div>
+
+   `
+
+renderSnowflakes()
+
+for(let ele of document.getElementsByTagName("input")){
+		ele.addEventListener("change", readInputs)
 	}
 
 </script>
