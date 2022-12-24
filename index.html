@@ -13,7 +13,7 @@
 	<meta name="twitter:description" content="Add a snowfall animation to ur website.">
 	<meta name="twitter:card" content="summary">
 	<meta name="twitter:creator" content="@joodaloop">	
-	<meta name="twitter:image" content="https://snowfall.joodaloop.com/logo.jpg" />
+	<meta name="twitter:image" content="https://rawcdn.githack.com/stealsocks/snowfall.css/a25e18d8b93fe0d790148371582e57c8e788dd1a/logo.jpg" />
 
 <link rel="icon" href="favicon.ico" type="image/x-icon"/>
 
@@ -29,7 +29,7 @@ body{
 	color: black;
 	padding: 30px;
 	font-size: 18px;
-	width: 420px;
+	width: 500px;
 	border-radius: 10px;
 	text-align: left;
 	word-wrap: break-word;
@@ -47,7 +47,7 @@ input{
 	color: white;
 	width: 50px;
 	display: inline-block;
-	margin: 0px 25px;
+	margin: 0px 32px;
 	margin-bottom: 5px;
 }
 
@@ -65,18 +65,36 @@ main{
 
 #copy{
 	padding:  10px;
-	width: 100px;
+	width: 130px;
 	background: white;
 	color: black;
 	float: right;
 	margin-top: 10px;
 	border-radius: 10px;
 	cursor: pointer;
+	font-family: monospace;
+}
+
+#copy:active{
+	cursor: pointer;
 }
 
 h1{
 	margin-top:  50px;
 	text-align: center;
+	color:  white;
+}
+
+a{
+	text-decoration: none;
+	color: white;
+}
+
+#link{
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	display: block;
 }
 
 </style>
@@ -84,7 +102,7 @@ h1{
 
 <body style="background:black">
 
-	<h1> snowfall.css </h1>
+	<a href="https://github.com/stealsocks/snowfall.css"><h1> snowfall.css </h1></a>
 
 <main>
 
@@ -96,30 +114,40 @@ h1{
 </div>
 
 <div id=inputs> 
-	<input id=color value="white" placeholder="white"> 
+	<input id=color value="white" placeholder="#FFF"> 
 	<input id=shape value="•" placeholder="•"> 
-	<input id=size value=1 placeholder="1 to 4"> 
-	<input id=amount value=4 placeholder="1 to 4"> 
+	<input id=size value=1 placeholder="0 to 5"> 
+	<input id=amount value=5 placeholder="0 to 5"> 
 </div>
 
-<div id=output> </div>
+<div id=output> &lt;script snow-color=&quot;white&quot; snow-shape=&quot;&bull;&quot; snow-amount=5 snow-size=1 src=&quot;https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js&quot;&gt;&lt;/script&gt; </div>
 <button id=copy onclick="copy()">Copy script</button>
 </main>
-<script snow-color="white" snow-amount=4 snow-size=2 snow-shape='•' src="snowfall.js"></script>
+
+<div id=link> <a href="https://joodaloop.com"> ur welcome :)</a> </div>
+
+<script snow-color="white" snow-amount="5" snow-size="1" snow-shape='•' src="snowfall.js"></script>
 
 <script>
 	function $(id){
 		return document.getElementById(id)
 	}
 
-	$("output").innerText = `<script snow-color="white" snow-shape="•" snow-amount=1 snow-size=1 src="https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js"><\/script>
-	`
-
 	function readInputs(){
 		let shape = $("shape").value
-		let size = $("size").value
+		let size = Number($("size").value)
 		let color = $("color").value
-		let amount = $("amount").value
+		let amount = Number($("amount").value)
+
+		if(isNaN(amount) == true){
+			amount = 5
+			$("amount").value = 5
+		}
+
+		if(isNaN(size) == true){
+			size = 1
+			$("size").value = 1
+		}
 
 		$("output").innerText = `<script snow-color="${color.trim()}" snow-shape="${shape.trim()}" snow-amount=${amount} snow-size=${size} src="https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js"><\/script>`
 	}
@@ -133,7 +161,7 @@ h1{
 
 		navigator.clipboard.writeText($("output").innerText);
 
-		setTimeout(() => $("copy").innerText = "Copy tag", 2000 )
+		setTimeout(() => $("copy").innerText = "Copy script", 1000 )
 	}
 
 </script>

@@ -1,32 +1,32 @@
-let this_js_script = document.querySelector('script[src*=snowfall]')
+let thisScript = document.querySelector('script[src*=snowfall]')
 
 
-let snowColor = this_js_script.getAttribute('snow-color') ?? undefined;  
+let snowColor = thisScript.getAttribute('snow-color') ?? undefined;  
 snowColor = snowColor.toLowerCase() 
 let check = isColor(snowColor)
 if (typeof snowColor !== "undefined" && !check ) {
    snowColor = "#fff";
 }
 
-let amount = this_js_script.getAttribute('snow-amount') ?? undefined; 
-if (typeof amount === "undefined" ) {
+let amount = thisScript.getAttribute('snow-amount') ?? undefined; 
+if (typeof amount === "undefined" || amount == "") {
    amount = 1;
 }
 
-let shape = this_js_script.getAttribute('snow-shape') ?? undefined; 
-if (typeof shape === "undefined") {
+let shape = thisScript.getAttribute('snow-shape') ?? undefined; 
+if (typeof shape === "undefined" || shape == "") {
    shape = "•";
 }
 if( shape.includes("\\") ){
    shape = shape.replace("\\", "\\\\")
 }
 
-let size = this_js_script.getAttribute('snow-size') ?? undefined; 
-if (typeof size === "undefined" ) {
+let size = thisScript.getAttribute('snow-size') ?? undefined; 
+if (typeof size === "undefined" || size == "") {
    size = 1;
 }
 
-if(size > 4) size = 4
+if(size > 5) size = 5
 if(size < 0) size = 1
 
 function isColor(strColor){
@@ -40,8 +40,8 @@ function renderSnowflakes(param = 1){
    let node
    let generated = ""
 
-   if (param > 4){
-      param = 4
+   if (param > 5){
+      param = 5
    }
 
    if(param < 0){
@@ -56,6 +56,10 @@ function renderSnowflakes(param = 1){
 
    for(i=0; i < (screen.width / 35) * param ; i++){
 
+      blur = 0
+      if(i%5 == 0) blur = "1"
+      if(i%10 == 0) blur = "2"
+
       node = document.getElementById("snowbg").children[i]
 
       generated += `
@@ -67,6 +71,7 @@ function renderSnowflakes(param = 1){
        left: ${Math.floor(Math.random() * 100)}vw;
        animation: snowfall ${7 + Math.floor(Math.random() * 10)}s linear infinite;
        animation-delay: -${Math.floor(Math.random() * 10)}s;
+       filter: blur(${blur}px);
          }
       `
 
