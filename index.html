@@ -112,7 +112,7 @@ h1{
 		return document.getElementById(id)
 	}
 
-	$("output").innerText = `<script snow-color="white" snow-shape="•" snow-amount=1 snow-size=1 src="https://rawcdn.githack.com/stealsocks/snowfall.css/407d432988215b9defa7f5d296451de44c7761c6/snowfall/snowfall.js"><\/script>
+	$("output").innerText = `<script snow-color="white" snow-shape="•" snow-amount=1 snow-size=1 src="https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js"><\/script>
 	`
 
 	function readInputs(){
@@ -121,7 +121,7 @@ h1{
 		let color = $("color").value
 		let amount = $("amount").value
 
-		$("output").innerText = `<script snow-color="${color.trim()}" snow-shape="${shape.trim()}" snow-amount=${amount} snow-size=${size} src="snowfall.js"><\/script>`
+		$("output").innerText = `<script snow-color="${color.trim()}" snow-shape="${shape.trim()}" snow-amount=${amount} snow-size=${size} src="https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js"><\/script>`
 	}
 
 	for(let ele of document.getElementsByTagName("input")){
