@@ -174,8 +174,9 @@ a{
 		if(bgcolor == "white"){
 
 			bgcolor = "black"
-			if( col.value == "black" ){
+			if( col.value == "black" || col.value == "#000") {
 				col.value = "white"
+				col.placeholder = "#FFF"
 				var event = new Event('change');
 				col.dispatchEvent(event);
 			}
@@ -185,8 +186,9 @@ a{
 		else{
 
 			bgcolor = "white"
-			if( col.value == "white" ){
+			if( col.value == "white" || col.value.toLowerCase() == "#fff" ){
 				col.value = "black"
+				col.placeholder = "#000"
 				var event = new Event('change');
 				col.dispatchEvent(event);
 			}
@@ -217,7 +219,6 @@ a{
 		let shape = $("shape").value
 		let size = Number($("size").value)
 		let color = $("color").value.replace(" ", "")
-		console.log(color)
 		let amount = Number($("amount").value)
 
 		if(isNaN(amount) == true || amount > 5){
@@ -233,6 +234,12 @@ a{
 		if(size > 5){
 			size = 5
 			$("size").value = 5
+		}
+
+		color = color.toLowerCase() 
+		let check = isColor(color)
+		if ( !check ) {
+		   color = white;
 		}
 
 		renderSnowflakes()
@@ -395,6 +402,7 @@ let stylesheet = `
    margin-left: 0%;
    position: fixed;
    pointer-events: none;
+   z-index: -1;
 }
 
 
