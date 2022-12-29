@@ -25,8 +25,6 @@ body{
 }
 
 #output{
-	background: white;
-	color: black;
 	padding: 30px;
 	font-size: 18px;
 	width: 500px;
@@ -44,11 +42,14 @@ input{
 }
 
 .input-label{
-	color: white;
 	width: 50px;
 	display: inline-block;
 	margin: 0px 32px;
 	margin-bottom: 5px;
+}
+
+#labels{
+	color: white;
 }
 
 #inputs{
@@ -62,13 +63,14 @@ main{
 	transform: translateX(-50%);
 	width: fit-content;
 	text-align: center;
+	/*z-index: 10;
+	display: block;
+	position: absolute;*/
 }
 
 #copy{
 	padding:  10px;
 	width: 130px;
-	background: white;
-	color: black;
 	float: right;
 	margin-top: 10px;
 	border-radius: 10px;
@@ -83,7 +85,7 @@ main{
 h1{
 	margin-top:  50px;
 	text-align: center;
-	color:  white;
+	color: white;
 }
 
 a{
@@ -98,12 +100,36 @@ a{
 	display: block;
 }
 
+#switch{
+	position: fixed;
+	left: 20px;
+	bottom: 20px;
+	display: block;
+	background: white;
+	border-radius: 50%;
+	height: 30px;
+	width: 30px;
+	cursor: pointer;
+	pointer-events: auto;
+	z-index: 10;
+}
+
+.dark{
+	background: black;
+	color: white;
+}
+
+.light{
+	background: white;
+	color: black;
+}
+
 </style>
 </head>
 
 <body style="background:black">
 
-	<a href="https://github.com/stealsocks/snowfall.css"><h1> snowfall.css </h1></a>
+	<h1><a href="https://github.com/stealsocks/snowfall.css"> snowfall.css </a> </h1>
 
 <main>
 
@@ -121,21 +147,77 @@ a{
 	<input id=amount value=5 placeholder="0 to 5"> 
 </div>
 
-<div id=output> &lt;script snow-color=&quot;white&quot; snow-shape=&quot;&bull;&quot; snow-amount=5 snow-size=1 src=&quot;https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js&quot;&gt;&lt;/script&gt; </div>
-<button id=copy onclick="copy()">Copy script</button>
+<div id=output class=light> &lt;script snow-color=&quot;white&quot; snow-shape=&quot;&bull;&quot; snow-amount=5 snow-size=1 src=&quot;https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js&quot;&gt;&lt;/script&gt; </div>
+<button id=copy onclick="copy()" class=light>Copy script</button>
 </main>
 
 <div id=link> <a href="https://joodaloop.com"> ur welcome :)</a> </div>
+<div id=switch></div>
 
 <script>
+
+	let bgcolor = "black"
+
 	function $(id){
 		return document.getElementById(id)
+	}
+
+	setTimeout(() => $("switch").addEventListener('click', switchbg), 10)
+
+	
+	function switchbg(){
+
+		$("switch").style.background = bgcolor 
+		$("labels").style.color = bgcolor
+		var col = document.getElementById('color');
+
+		if(bgcolor == "white"){
+
+			bgcolor = "black"
+			if( col.value == "black" ){
+				col.value = "white"
+				var event = new Event('change');
+				col.dispatchEvent(event);
+			}
+
+		}
+
+		else{
+
+			bgcolor = "white"
+			if( col.value == "white" ){
+				col.value = "black"
+				var event = new Event('change');
+				col.dispatchEvent(event);
+			}
+
+		}
+	
+
+		document.body.style.background = bgcolor
+
+		document.body.classList.toggle("dark")
+		$("labels").classList.toggle("light")
+		$("output").classList.toggle("dark")
+		$("output").classList.toggle("light")
+		$("copy").classList.toggle("dark")
+		$("copy").classList.toggle("light")
+
+		for(let ele of document.getElementsByTagName("a")){
+			ele.classList.toggle('light')
+		}
+
+		for(let ele of document.getElementsByTagName("input")){
+			ele.classList.toggle('dark')
+		}
+
 	}
 
 	function readInputs(){
 		let shape = $("shape").value
 		let size = Number($("size").value)
-		let color = $("color").value
+		let color = $("color").value.replace(" ", "")
+		console.log(color)
 		let amount = Number($("amount").value)
 
 		if(isNaN(amount) == true || amount > 5){
@@ -178,7 +260,7 @@ function renderSnowflakes(){
 
 	console.log("rendering") 
 
-	let snowColor = $('color').value; 
+	let snowColor = $("color").value.replace(" ", "")
 	
 	snowColor = snowColor.toLowerCase() 
 	let check = isColor(snowColor)
