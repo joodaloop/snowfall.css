@@ -128,7 +128,7 @@ a{
 </head>
 
 <body style="background:black">
-
+<div id=snowbg></div>
 	<h1><a href="https://github.com/stealsocks/snowfall.css"> snowfall.css </a> </h1>
 
 <main>
@@ -244,7 +244,7 @@ a{
 
 		renderSnowflakes()
 
-		$("output").innerText = `<script snow-color="${color.trim()}" snow-shape="${shape.trim()}" snow-amount=${amount} snow-size=${size} src="https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js"><\/script>`
+		$("output").innerText = `<script snow-color="${color.trim()}" snow-shape="${shape.trim()}" snow-amount="${amount}" snow-size="${size}" src="https://rawcdn.githack.com/stealsocks/snowfall.css/16cee8e4ba02cc5de7d287d0ece7b5b1d12d6cec/snowfall.js"><\/script>`
 	
 	}
 
@@ -402,7 +402,6 @@ let stylesheet = `
    margin-left: 0%;
    position: fixed;
    pointer-events: none;
-   z-index: -1;
 }
 
 
@@ -502,12 +501,6 @@ let style = document.createElement('style');
    style.id="snowstyle"
    style.innerHTML = ""
    document.getElementsByTagName('head')[0].appendChild(style);
-
-document.body.innerHTML += `
-
-   <div id=snowbg></div>
-
-   `
 
 renderSnowflakes()
 
