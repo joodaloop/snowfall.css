@@ -48,11 +48,10 @@ function renderSnowflakes(param = 1){
       param = 1
    }
 
-   document.body.innerHTML += `
+   let div = document.createElement("div");
+   div.id = "snowbg"
 
-   <div id=snowbg></div>
-
-   `
+   document.body.prepend(div)
 
    for(i=0; i < (screen.width / 35) * param ; i++){
 

@@ -128,7 +128,6 @@ a{
 </head>
 
 <body style="background:black">
-<div id=snowbg></div>
 	<h1><a href="https://github.com/stealsocks/snowfall.css"> snowfall.css </a> </h1>
 
 <main>
@@ -161,6 +160,11 @@ a{
 	function $(id){
 		return document.getElementById(id)
 	}
+
+	let div = document.createElement("div");
+   div.id = "snowbg"
+
+   document.body.prepend(div)
 
 	setTimeout(() => $("switch").addEventListener('click', switchbg), 10)
 
