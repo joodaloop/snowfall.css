@@ -64,7 +64,7 @@ function renderSnowflakes(param = 1){
       generated += `
 
 .snowflake:nth-child(${i+1}) {
-       --size: ${Math.floor(Math.random() * 10 * size) / 8}vw;
+       --size: ${Math.floor(Math.random() * 10 * size) / 7}vw;
        --left-ini: ${Math.floor(Math.random() * 10) - 10}vw;
        --left-end: ${Math.floor(Math.random() * 10) - 10}vw;
        left: ${Math.floor(Math.random() * 100)}vw;
